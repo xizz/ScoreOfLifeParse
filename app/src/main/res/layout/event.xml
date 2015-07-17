@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	android:id="@+id/RelativeLayout1"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:orientation="vertical">
+
+	<TextView
+		android:id="@+id/eventItemName"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="Event Name"
+		android:textAppearance="?android:attr/textAppearanceMedium"
+		android:textStyle="bold|italic"/>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Score: "
+			android:textColor="#C0C0C0"
+			android:textStyle="bold"/>
+
+		<TextView
+			android:id="@+id/eventItemScore"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="100"
+			android:textColor="#FFF"
+			android:textStyle="bold|italic"/>
+	</LinearLayout>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Start Date: "
+			android:textColor="#C0C0C0"
+			android:textStyle="bold"/>
+
+		<TextView
+			android:id="@+id/eventItemStartDate"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="1111-11-11"
+			android:textColor="#FFF"
+			android:textStyle="bold|italic"/>
+	</LinearLayout>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="End Date: "
+			android:textColor="#C0C0C0"
+			android:textStyle="bold"/>
+
+		<TextView
+			android:id="@+id/eventItemEndDate"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="1111-11-11"
+			android:textColor="#FFF"
+			android:textStyle="bold|italic"/>
+	</LinearLayout>
+</LinearLayout>

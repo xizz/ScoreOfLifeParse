@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	android:id="@+id/RelativeLayout1"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:orientation="horizontal">
+
+	<LinearLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:orientation="vertical">
+
+		<TextView
+			android:id="@+id/eventItemName"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Event Name"
+			android:textAppearance="?android:attr/textAppearanceMedium"
+			android:textStyle="bold|italic"/>
+
+		<LinearLayout
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Score: "
+				android:textColor="#C0C0C0"
+				android:textStyle="bold"/>
+
+			<TextView
+				android:id="@+id/eventItemScore"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="100"
+				android:textColor="#FFF"
+				android:textStyle="bold|italic"/>
+		</LinearLayout>
+	</LinearLayout>
+
+	<CheckBox
+		android:id="@+id/isDone"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentRight="true"
+		android:layout_centerVertical="true"/>
+
+</RelativeLayout>

@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<item
+		android:id="@+id/edit"
+		android:orderInCategory="50"
+		android:showAsAction="always"
+		android:title="@string/edit"/>
+	<item
+		android:id="@+id/delete"
+		android:orderInCategory="60"
+		android:showAsAction="ifRoom"
+		android:title="@string/delete"/>
+
+</menu>

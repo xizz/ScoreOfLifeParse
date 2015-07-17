@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	android:id="@+id/RelativeLayout1"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical">
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Event Name"/>
+
+	<EditText
+		android:id="@+id/editTextName"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:ems="10"
+		android:hint="Name of the event"
+		android:lines="1">
+
+		<requestFocus/>
+	</EditText>
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Event Score"/>
+
+	<EditText
+		android:id="@+id/editTextScore"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:ems="10"
+		android:hint="How many points?"
+		android:inputType="number"/>
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Event Start Date"/>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
+
+		<EditText
+			android:id="@+id/editTextStartDate"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:editable="false"
+			android:ems="10"
+			android:onClick="pickDate"/>
+
+		<Button
+			android:id="@+id/buttonStartDate"
+			style="?android:attr/buttonStyleSmall"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:onClick="pickStartDate"
+			android:text="Pick Date"/>
+	</LinearLayout>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
+
+		<CheckBox
+			android:id="@+id/checkBoxEndDate"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Event End Date"/>
+	</LinearLayout>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
+
+		<EditText
+			android:id="@+id/editTextEndDate"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:editable="false"
+			android:ems="10"/>
+
+		<Button
+			android:id="@+id/buttonEndDate"
+			style="?android:attr/buttonStyleSmall"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:onClick="pickEndDate"
+			android:text="Pick Date"/>
+	</LinearLayout>
+
+</LinearLayout>
