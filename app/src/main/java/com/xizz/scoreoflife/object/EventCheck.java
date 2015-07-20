@@ -1,8 +1,12 @@
 package com.xizz.scoreoflife.object;
 
+import com.parse.ParseClassName;
+import com.parse.ParseObject;
+
 import java.sql.Date;
 
-public class EventCheck {
+@ParseClassName("EventCheck")
+public class EventCheck extends ParseObject {
 	private final static String NEWLINE = System.getProperty("line.separator");
 
 	public Event event;
@@ -24,11 +28,9 @@ public class EventCheck {
 
 	@Override
 	public String toString() {
-		if (event == null) {
-			return new Date(date) + NEWLINE + isDone + NEWLINE
-					+ eventId;
-		} else
+		if (event == null)
+			return new Date(date) + NEWLINE + isDone + NEWLINE + eventId;
+		else
 			return new Date(date) + NEWLINE + isDone + NEWLINE + event;
 	}
-
 }

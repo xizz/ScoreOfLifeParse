@@ -17,6 +17,7 @@
 	<string name="current_events">Current Events</string>
 	<string name="past_events">Past Events</string>
 	<string name="future_events">Future Events</string>
+	<string name="sync">Sync</string>
 	<string name="sign_out">Sign Out</string>
 
 </resources>

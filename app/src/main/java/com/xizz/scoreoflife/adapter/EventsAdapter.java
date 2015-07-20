@@ -19,8 +19,7 @@ public class EventsAdapter extends BaseAdapter {
 	private List<Event> mEvents;
 
 	public EventsAdapter(Context context, List<Event> events) {
-		mInflater = (LayoutInflater) context
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		mEvents = events;
 	}
 
@@ -43,23 +42,19 @@ public class EventsAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		final View row = mInflater.inflate(R.layout.event, parent, false);
 
-		final TextView nameView = (TextView) row
-				.findViewById(R.id.eventItemName);
-		final TextView scoreView = (TextView) row
-				.findViewById(R.id.eventItemScore);
-		final TextView startDateView = (TextView) row
-				.findViewById(R.id.eventItemStartDate);
-		final TextView endDateView = (TextView) row
-				.findViewById(R.id.eventItemEndDate);
+		final TextView nameView = (TextView) row.findViewById(R.id.eventItemName);
+		final TextView scoreView = (TextView) row.findViewById(R.id.eventItemScore);
+		final TextView startDateView = (TextView) row.findViewById(R.id.eventItemStartDate);
+		final TextView endDateView = (TextView) row.findViewById(R.id.eventItemEndDate);
 		final Event event = mEvents.get(position);
-		nameView.setText(event.name);
-		scoreView.setText(Integer.toString(event.score));
-		startDateView.setText(new Date(event.startDate).toString());
-		if (event.endDate != Long.MAX_VALUE) {
-			endDateView.setText(new Date(event.endDate).toString());
-		} else {
+
+		nameView.setText(event.getName());
+		scoreView.setText(Integer.toString(event.getScore()));
+		startDateView.setText(new Date(event.getStartDate()).toString());
+		if (event.getEndDate() != Long.MAX_VALUE)
+			endDateView.setText(new Date(event.getEndDate()).toString());
+		else
 			endDateView.setText("Not Set");
-		}
 
 		return (row);
 	}
@@ -71,5 +66,4 @@ public class EventsAdapter extends BaseAdapter {
 	public void add(Event event) {
 		mEvents.add(event);
 	}
-
 }
