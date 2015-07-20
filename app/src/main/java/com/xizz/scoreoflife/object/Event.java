@@ -9,11 +9,11 @@ import java.sql.Date;
 public class Event extends ParseObject {
 	public static final String ORDER_INDEX = "orderIndex";
 	public static final String CLASS_NAME = Event.class.getSimpleName();
+	public static final String NAME = "name";
+	public static final String SCORE = "score";
+	public static final String START_DATE = "startDate";
+	public static final String END_DATE = "endDate";
 	private static final String NEWLINE = System.getProperty("line.separator");
-	private static final String NAME = "name";
-	private static final String SCORE = "score";
-	private static final String START_DATE = "startDate";
-	private static final String END_DATE = "endDate";
 	public long id;
 	public String name;
 	public int score;

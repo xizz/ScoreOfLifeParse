@@ -65,22 +65,21 @@ public class EventsActivity extends Activity implements
 	private void loadEventList() {
 
 		ParseQuery<Event> query = ParseQuery.getQuery(Event.class.getSimpleName());
-		query.orderByAscending(Event.ORDER_INDEX);
-		// TODO: should query current, future, past events differently
-		//		switch (mCurrentList) {
-//		case CURRENT_EVENTS:
-//			events = mSource.getEvents(mToday);
-//			break;
-//		case PAST_EVENTS:
-//			events = mSource.getPastEvents(mToday);
-//			break;
-//		case FUTURE_EVENTS:
-//			events = mSource.getFutureEvents(mToday);
-//			break;
-//		}
-
 		query.fromLocalDatastore();
-//		query.whereEqualTo("playerName", "Dan Stemkoski");
+		query.orderByAscending(Event.ORDER_INDEX);
+		switch (mCurrentList) {
+			case CURRENT_EVENTS:
+				query.whereGreaterThanOrEqualTo(Event.END_DATE, mToday);
+				query.whereLessThanOrEqualTo(Event.START_DATE, mToday);
+				break;
+			case PAST_EVENTS:
+				query.whereLessThan(Event.END_DATE, mToday);
+				break;
+			case FUTURE_EVENTS:
+				query.whereGreaterThan(Event.START_DATE, mToday);
+				break;
+		}
+
 		try {
 			List<Event> events = query.find();
 			Log.d(TAG, "Retrieved " + events.size() + " events");

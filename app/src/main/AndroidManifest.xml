@@ -21,17 +21,17 @@
 			android:value="@string/parse_client_key"/>
 
 		<activity
-			android:name="com.xizz.scoreoflife.EventsActivity"
-			android:label="@string/title_activity_events"
-			android:parentActivityName="com.xizz.scoreoflife.MainActivity">
+			android:name="com.xizz.scoreoflife.MainActivity"
+			android:label="@string/app_name">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
 				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
 		</activity>
 		<activity
-			android:name="com.xizz.scoreoflife.MainActivity"
-			android:label="@string/app_name">
+			android:name="com.xizz.scoreoflife.EventsActivity"
+			android:label="@string/title_activity_events"
+			android:parentActivityName="com.xizz.scoreoflife.MainActivity">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
 				<category android:name="android.intent.category.LAUNCHER"/>
