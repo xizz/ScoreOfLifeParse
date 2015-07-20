@@ -13,6 +13,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 
+import com.parse.ParseUser;
+import com.parse.ui.ParseLoginActivity;
 import com.xizz.scoreoflife.adapter.EventsAdapter;
 import com.xizz.scoreoflife.db.DataSource;
 import com.xizz.scoreoflife.object.Event;
@@ -48,8 +50,11 @@ public class EventsActivity extends Activity implements
 
 	@Override
 	protected void onResume() {
-		loadEventList();
 		super.onResume();
+
+		loadEventList();
+		if (ParseUser.getCurrentUser() == null)
+			startActivity(new Intent(this, ParseLoginActivity.class));
 	}
 
 	private void loadEventList() {
@@ -104,6 +109,10 @@ public class EventsActivity extends Activity implements
 					mCurrentList = FUTURE_EVENTS;
 					loadEventList();
 				}
+				break;
+			case R.id.sign_out:
+				ParseUser.logOut();
+				startActivity(new Intent(this, ParseLoginActivity.class));
 				break;
 		}
 		return true;

@@ -44,10 +44,8 @@ public class MainActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 
-		if (ParseUser.getCurrentUser() == null) {
-			Intent intent = new Intent(this, ParseLoginActivity.class);
-			startActivity(intent);
-		}
+		if (ParseUser.getCurrentUser() == null)
+			startActivity(new Intent(this, ParseLoginActivity.class));
 
 		mAdapter = new ChecksPagerAdapter(this);
 		mPager.setAdapter(mAdapter);
@@ -93,6 +91,10 @@ public class MainActivity extends Activity {
 				break;
 			case R.id.manage_events:
 				startActivity(new Intent(this, EventsActivity.class));
+				break;
+			case R.id.sign_out:
+				ParseUser.logOut();
+				startActivity(new Intent(this, ParseLoginActivity.class));
 				break;
 			default:
 				return false;
