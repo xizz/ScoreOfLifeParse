@@ -15,6 +15,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
+import com.xizz.scoreoflife.object.Event;
 import com.xizz.scoreoflife.util.Util;
 
 import java.sql.Date;
@@ -41,8 +42,7 @@ public class EventInputActivity extends Activity {
 
 		mCheckEndDate.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
-			public void onCheckedChanged(CompoundButton buttonView,
-			                             boolean isChecked) {
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				mBtnPickEndDate.setClickable(isChecked);
 				mEndDateView.setEnabled(isChecked);
 			}
@@ -57,25 +57,25 @@ public class EventInputActivity extends Activity {
 		initialize();
 
 		Intent intent = getIntent();
-		long startDate = intent.getLongExtra(Util.START_DATE, 0);
+		long startDate = intent.getLongExtra(Event.START_DATE, 0);
 
 		// Find out if this is call from new or edit.
 		if (startDate != 0) {
-			mNameView.setText(intent.getStringExtra(Util.NAME));
-			mScoreView.setText(Integer.toString(intent.getIntExtra(Util.SCORE,
-					0)));
+			mNameView.setText(intent.getStringExtra(Event.NAME));
+			mScoreView.setText(Integer.toString(intent.getIntExtra(Event.SCORE, 0)));
 			mStartDateView.setText(new Date(startDate).toString());
 			setTitle("Edit Event");
 		} else {
-			mStartDateView.setText(new Date(System.currentTimeMillis())
-					.toString());
+			mStartDateView.setText(new Date(System.currentTimeMillis()).toString());
 		}
 
 		setStartDatePicker();
 		setEndDatePicker();
 
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-		getActionBar().setHomeButtonEnabled(true);
+		if (getActionBar() != null) {
+			getActionBar().setDisplayHomeAsUpEnabled(true);
+			getActionBar().setHomeButtonEnabled(true);
+		}
 	}
 
 	@Override
@@ -118,13 +118,13 @@ public class EventInputActivity extends Activity {
 		if (error)
 			return;
 		Intent output = new Intent();
-		output.putExtra(Util.NAME, mNameView.getText().toString());
-		output.putExtra(Util.SCORE, Integer.parseInt(score));
+		output.putExtra(Event.NAME, mNameView.getText().toString());
+		output.putExtra(Event.SCORE, Integer.parseInt(score));
 		try {
-			output.putExtra(Util.START_DATE, Util.DATE_FORMAT.parse(startDate)
+			output.putExtra(Event.START_DATE, Util.DATE_FORMAT.parse(startDate)
 					.getTime());
 			if (mCheckEndDate.isChecked()) {
-				output.putExtra(Util.END_DATE, Util.DATE_FORMAT.parse(endDate)
+				output.putExtra(Event.END_DATE, Util.DATE_FORMAT.parse(endDate)
 						.getTime());
 			}
 		} catch (ParseException e) {
@@ -143,7 +143,7 @@ public class EventInputActivity extends Activity {
 	}
 
 	private void setStartDatePicker() {
-		long startDate = getIntent().getLongExtra(Util.START_DATE, 0);
+		long startDate = getIntent().getLongExtra(Event.START_DATE, 0);
 		if (startDate != 0) {
 			mStartDateView.setText(new Date(startDate).toString());
 		} else {
@@ -157,31 +157,26 @@ public class EventInputActivity extends Activity {
 
 		OnDateSetListener listener = new OnDateSetListener() {
 			@Override
-			public void onDateSet(DatePicker view, int year, int monthOfYear,
-			                      int dayOfMonth) {
+			public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 				mStartDateView.setText("" + year + "-"
 						+ String.format("%02d", (monthOfYear + 1)) + "-"
 						+ String.format("%02d", dayOfMonth));
 			}
 		};
-
-		mStartDatePicker = new DatePickerDialog(this, listener, year, month,
-				day);
+		mStartDatePicker = new DatePickerDialog(this, listener, year, month, day);
 	}
 
 	private void setEndDatePicker() {
-		long endDate = getIntent().getLongExtra(Util.END_DATE, Long.MAX_VALUE);
+		long endDate = getIntent().getLongExtra(Event.END_DATE, Long.MAX_VALUE);
 		boolean hasEndDate = endDate != Long.MAX_VALUE;
 		mCheckEndDate.setChecked(hasEndDate);
 		mBtnPickEndDate.setClickable(hasEndDate);
 		mEndDateView.setEnabled(hasEndDate);
 
-		if (hasEndDate) {
+		if (hasEndDate)
 			mEndDateView.setText(new Date(endDate).toString());
-		} else {
-			mEndDateView.setText(new Date(System.currentTimeMillis())
-					.toString());
-		}
+		else
+			mEndDateView.setText(new Date(System.currentTimeMillis()).toString());
 
 		String date = mEndDateView.getText().toString();
 		int year = Integer.parseInt(date.substring(0, 4));
@@ -190,8 +185,7 @@ public class EventInputActivity extends Activity {
 
 		OnDateSetListener listener = new OnDateSetListener() {
 			@Override
-			public void onDateSet(DatePicker view, int year, int monthOfYear,
-			                      int dayOfMonth) {
+			public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 				mEndDateView.setText("" + year + "-"
 						+ String.format("%02d", (monthOfYear + 1)) + "-"
 						+ String.format("%02d", dayOfMonth));

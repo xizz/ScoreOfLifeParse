@@ -113,10 +113,10 @@ public class MainActivity extends Activity {
 		switch (requestCode) {
 			case Util.REQUEST_ADD:
 				Event event = new Event();
-				event.name = data.getStringExtra(Util.NAME);
-				event.score = data.getIntExtra(Util.SCORE, 0);
-				event.startDate = data.getLongExtra(Util.START_DATE, 0);
-				event.endDate = data.getLongExtra(Util.END_DATE, Long.MAX_VALUE);
+				event.name = data.getStringExtra(Event.NAME);
+				event.score = data.getIntExtra(Event.SCORE, 0);
+				event.startDate = data.getLongExtra(Event.START_DATE, 0);
+				event.endDate = data.getLongExtra(Event.END_DATE, Long.MAX_VALUE);
 				mSource.insertEvent(event);
 				break;
 		}

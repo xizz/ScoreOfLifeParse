@@ -18,13 +18,6 @@ public class Util {
 
 	public final static String NEWLINE = System.getProperty("line.separator");
 
-	public final static String NAME = "name";
-	public final static String SCORE = "score";
-	public final static String START_DATE = "start_date";
-	public final static String END_DATE = "end_date";
-	public final static String ID = "id";
-	public final static String ORDER_INDEX = "order_index";
-
 	public final static int REQUEST_ADD = 111;
 	public final static int REQUEST_EDIT = 222;
 

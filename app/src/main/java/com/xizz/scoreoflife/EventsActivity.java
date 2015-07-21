@@ -83,6 +83,8 @@ public class EventsActivity extends Activity implements
 		try {
 			List<Event> events = query.find();
 			Log.d(TAG, "Retrieved " + events.size() + " events");
+			for (Event event : events)
+				Log.d(TAG, "Event ID: " + event.getObjectId());
 			mAdapter = new EventsAdapter(EventsActivity.this, events);
 			mEventsView.setAdapter(mAdapter);
 
@@ -138,16 +140,15 @@ public class EventsActivity extends Activity implements
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-	                        long id) {
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		final Event event = (Event) mAdapter.getItem(position);
 		Intent intent = new Intent(this, EventDetailActivity.class);
-		intent.putExtra(Util.ID, event.getObjectId());
-		intent.putExtra(Util.NAME, event.getName());
-		intent.putExtra(Util.SCORE, event.getScore());
-		intent.putExtra(Util.START_DATE, event.getStartDate());
-		intent.putExtra(Util.END_DATE, event.getEndDate());
-		intent.putExtra(Util.ORDER_INDEX, event.getOrderIndex());
+		intent.putExtra(Event.ID, event.getObjectId());
+		intent.putExtra(Event.NAME, event.getName());
+		intent.putExtra(Event.SCORE, event.getScore());
+		intent.putExtra(Event.START_DATE, event.getStartDate());
+		intent.putExtra(Event.END_DATE, event.getEndDate());
+		intent.putExtra(Event.ORDER_INDEX, event.getOrderIndex());
 		startActivity(intent);
 	}
 
@@ -183,10 +184,10 @@ public class EventsActivity extends Activity implements
 		switch (requestCode) {
 			case Util.REQUEST_ADD:
 				final Event event = new Event();
-				event.setName(data.getStringExtra(Util.NAME));
-				event.setScore(data.getIntExtra(Util.SCORE, 0));
-				event.setStartDate(data.getLongExtra(Util.START_DATE, 0));
-				event.setEndDate(data.getLongExtra(Util.END_DATE, Long.MAX_VALUE));
+				event.setName(data.getStringExtra(Event.NAME));
+				event.setScore(data.getIntExtra(Event.SCORE, 0));
+				event.setStartDate(data.getLongExtra(Event.START_DATE, 0));
+				event.setEndDate(data.getLongExtra(Event.END_DATE, Long.MAX_VALUE));
 				event.setOrderIndex(0);
 				Log.d(TAG, "Event ID: " + event.getObjectId());
 				Log.d(TAG, "event: " + event);
@@ -201,10 +202,10 @@ public class EventsActivity extends Activity implements
 				loadEventList();
 				break;
 			case Util.REQUEST_EDIT:
-				mEventClicked.setName(data.getStringExtra(Util.NAME));
-				mEventClicked.setScore(data.getIntExtra(Util.SCORE, 0));
-				mEventClicked.setStartDate(data.getLongExtra(Util.START_DATE, 0));
-				mEventClicked.setEndDate(data.getLongExtra(Util.END_DATE, Long.MAX_VALUE));
+				mEventClicked.setName(data.getStringExtra(Event.NAME));
+				mEventClicked.setScore(data.getIntExtra(Event.SCORE, 0));
+				mEventClicked.setStartDate(data.getLongExtra(Event.START_DATE, 0));
+				mEventClicked.setEndDate(data.getLongExtra(Event.END_DATE, Long.MAX_VALUE));
 				mEventClicked.saveEventually();
 				mAdapter.notifyDataSetChanged();
 				break;
@@ -236,12 +237,12 @@ public class EventsActivity extends Activity implements
 
 	private void editEvent(Event event) {
 		Intent intent = new Intent(EventsActivity.this, EventInputActivity.class);
-		intent.putExtra(Util.ID, event.getObjectId());
-		intent.putExtra(Util.NAME, event.getName());
-		intent.putExtra(Util.SCORE, event.getScore());
-		intent.putExtra(Util.START_DATE, event.getStartDate());
-		intent.putExtra(Util.END_DATE, event.getEndDate());
-		intent.putExtra(Util.ORDER_INDEX, event.getOrderIndex());
+		intent.putExtra(Event.ID, event.getObjectId());
+		intent.putExtra(Event.NAME, event.getName());
+		intent.putExtra(Event.SCORE, event.getScore());
+		intent.putExtra(Event.START_DATE, event.getStartDate());
+		intent.putExtra(Event.END_DATE, event.getEndDate());
+		intent.putExtra(Event.ORDER_INDEX, event.getOrderIndex());
 		startActivityForResult(intent, Util.REQUEST_EDIT);
 	}
 

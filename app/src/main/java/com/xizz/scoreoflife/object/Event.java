@@ -7,12 +7,14 @@ import java.sql.Date;
 
 @ParseClassName("Event")
 public class Event extends ParseObject {
-	public static final String ORDER_INDEX = "orderIndex";
 	public static final String CLASS_NAME = Event.class.getSimpleName();
+	public static final String ID = "id";
 	public static final String NAME = "name";
 	public static final String SCORE = "score";
 	public static final String START_DATE = "startDate";
 	public static final String END_DATE = "endDate";
+	public static final String ORDER_INDEX = "orderIndex";
+
 	private static final String NEWLINE = System.getProperty("line.separator");
 	public long id;
 	public String name;
@@ -21,13 +23,7 @@ public class Event extends ParseObject {
 	public long endDate;
 	public int orderIndex;
 
-	public Event() {
-//		name = "";
-//		score = 0;
-//		startDate = 0;
-//		endDate = Long.MAX_VALUE;
-//		orderIndex = 0;
-	}
+	public Event() { }
 
 	public Event(String name, int score, long startDate, long endDate, int orderIndex) {
 		setName(name);
