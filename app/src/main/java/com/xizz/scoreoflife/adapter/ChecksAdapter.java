@@ -10,7 +10,6 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.xizz.scoreoflife.R;
-import com.xizz.scoreoflife.db.DataSource;
 import com.xizz.scoreoflife.object.EventCheck;
 
 import java.util.List;
@@ -19,13 +18,11 @@ public class ChecksAdapter extends BaseAdapter {
 
 	private LayoutInflater mInflater;
 	private List<EventCheck> mChecks;
-	private DataSource mDataSource;
 
 	public ChecksAdapter(Context context, List<EventCheck> checks) {
 		mInflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		mChecks = checks;
-		mDataSource = DataSource.getDataSource(context);
 	}
 
 	@Override
@@ -45,27 +42,26 @@ public class ChecksAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		final View row = mInflater.inflate(R.layout.event_check, parent, false);
+		if (convertView == null)
+			convertView = mInflater.inflate(R.layout.event_check, parent, false);
 
-		final TextView nameView = (TextView) row
-				.findViewById(R.id.eventItemName);
-		final TextView scoreView = (TextView) row
-				.findViewById(R.id.eventItemScore);
+		final TextView nameView = (TextView) convertView.findViewById(R.id.eventItemName);
+		final TextView scoreView = (TextView) convertView.findViewById(R.id.eventItemScore);
 		final EventCheck check = mChecks.get(position);
-		nameView.setText(check.event.name);
-		scoreView.setText(Integer.toString(check.event.score));
 
-		final CheckBox checkBox = (CheckBox) row.findViewById(R.id.isDone);
-		checkBox.setChecked(check.isDone);
+		nameView.setText(check.getEvent().getName());
+		scoreView.setText(Integer.toString(check.getEvent().getScore()));
+
+		final CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.isDone);
+		checkBox.setChecked(check.getDone());
 
 		checkBox.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
-				check.isDone = ((CheckBox) v).isChecked();
-				mDataSource.updateCheck(check);
+				check.setDone(((CheckBox) v).isChecked());
+				check.saveEventually();
 			}
 		});
-		return row;
+		return convertView;
 	}
 }

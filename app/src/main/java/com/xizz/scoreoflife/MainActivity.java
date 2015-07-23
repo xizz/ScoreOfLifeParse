@@ -4,19 +4,20 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.ui.ParseLoginActivity;
 import com.xizz.scoreoflife.adapter.ChecksPagerAdapter;
-import com.xizz.scoreoflife.db.DataSource;
 import com.xizz.scoreoflife.object.Event;
 import com.xizz.scoreoflife.util.Util;
 
 public class MainActivity extends Activity {
+	private static final String TAG = MainActivity.class.getSimpleName();
 
-	private DataSource mSource;
 	private long mDisplayDate = -1;
 	private ViewPager mPager;
 	private ChecksPagerAdapter mAdapter;
@@ -33,9 +34,6 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
-		mSource = DataSource.getDataSource(this);
-		mSource.open();
 
 		mPager = (ViewPager) findViewById(R.id.pager);
 	}
@@ -65,12 +63,6 @@ public class MainActivity extends Activity {
 		mDisplayDate = indexToDate(mPager.getCurrentItem(),
 				mAdapter.getFirstDay());
 		super.onPause();
-	}
-
-	@Override
-	protected void onDestroy() {
-		mSource.close();
-		super.onDestroy();
 	}
 
 	@Override
@@ -113,11 +105,18 @@ public class MainActivity extends Activity {
 		switch (requestCode) {
 			case Util.REQUEST_ADD:
 				Event event = new Event();
-				event.name = data.getStringExtra(Event.NAME);
-				event.score = data.getIntExtra(Event.SCORE, 0);
-				event.startDate = data.getLongExtra(Event.START_DATE, 0);
-				event.endDate = data.getLongExtra(Event.END_DATE, Long.MAX_VALUE);
-				mSource.insertEvent(event);
+				event.setName(data.getStringExtra(Event.NAME));
+				event.setScore(data.getIntExtra(Event.SCORE, 0));
+				event.setStartDate(data.getLongExtra(Event.START_DATE, 0));
+				event.setEndDate(data.getLongExtra(Event.END_DATE, Long.MAX_VALUE));
+				event.setOrderIndex(0);
+				try {
+					event.pin(Event.CLASS_NAME);
+					event.saveEventually();
+				} catch (ParseException e) {
+					Log.e(TAG, "Error pinning event: " + e.getMessage());
+				}
+				EventsActivity.updateOrderIndex();
 				break;
 		}
 	}

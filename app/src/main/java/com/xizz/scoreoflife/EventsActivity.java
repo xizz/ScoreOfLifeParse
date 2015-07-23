@@ -41,6 +41,22 @@ public class EventsActivity extends Activity implements
 	private int mCurrentList = CURRENT_EVENTS;
 	private long mToday = Util.getToday();
 
+	public static void updateOrderIndex() {
+		ParseQuery<Event> query = ParseQuery.getQuery(Event.class.getSimpleName());
+		query.orderByAscending(Event.ORDER_INDEX);
+		query.fromLocalDatastore();
+		try {
+			List<Event> events = query.find();
+			for (int i = 0; i < events.size(); ++i) {
+				Event event = events.get(i);
+				event.setOrderIndex(i + 1);
+				event.saveEventually();
+			}
+		} catch (ParseException e) {
+			Log.e(TAG, "Error reading local database: " + e.getMessage());
+		}
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -92,7 +108,6 @@ public class EventsActivity extends Activity implements
 			Log.e(TAG, "Error reading local database: " + e.getMessage());
 		}
 	}
-
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -209,22 +224,6 @@ public class EventsActivity extends Activity implements
 				mEventClicked.saveEventually();
 				mAdapter.notifyDataSetChanged();
 				break;
-		}
-	}
-
-	private void updateOrderIndex() {
-		ParseQuery<Event> query = ParseQuery.getQuery(Event.class.getSimpleName());
-		query.orderByAscending(Event.ORDER_INDEX);
-		query.fromLocalDatastore();
-		try {
-			List<Event> events = query.find();
-			for (int i = 0; i < events.size(); ++i) {
-				Event event = events.get(i);
-				event.setOrderIndex(i + 1);
-				event.saveEventually();
-			}
-		} catch (ParseException e) {
-			Log.e(TAG, "Error reading local database: " + e.getMessage());
 		}
 	}
 

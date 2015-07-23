@@ -7,30 +7,35 @@ import java.sql.Date;
 
 @ParseClassName("EventCheck")
 public class EventCheck extends ParseObject {
-	private final static String NEWLINE = System.getProperty("line.separator");
+	public static final String CLASS_NAME = EventCheck.class.getSimpleName();
+	public static final String EVENT = "event";
+	public static final String DATE = "date";
+	public static final String DONE = "done";
 
-	public Event event;
-	public long eventId;
-	public long date;
-	public boolean isDone;
+	private static final String NEWLINE = System.getProperty("line.separator");
 
-	public EventCheck() {
-		eventId = 0;
-		date = 0;
-		isDone = false;
-	}
+	public EventCheck() { }
 
-	public EventCheck(long id, long d) {
-		eventId = id;
-		date = d;
-		isDone = false;
+	public EventCheck(Event event, long date) {
+		setEvent(event);
+		setDate(date);
+		setDone(false);
 	}
 
 	@Override
 	public String toString() {
-		if (event == null)
-			return new Date(date) + NEWLINE + isDone + NEWLINE + eventId;
-		else
-			return new Date(date) + NEWLINE + isDone + NEWLINE + event;
+		return new Date(getDate()) + NEWLINE + getDone() + NEWLINE + getEvent();
 	}
+
+	public Event getEvent() { return (Event) getParseObject(EVENT); }
+
+	public void setEvent(Event event) { put(EVENT, event);}
+
+	public long getDate() { return getLong(DATE); }
+
+	public void setDate(long date) { put(DATE, date);}
+
+	public boolean getDone() { return getBoolean(DONE); }
+
+	public void setDone(boolean done) { put(DONE, done);}
 }

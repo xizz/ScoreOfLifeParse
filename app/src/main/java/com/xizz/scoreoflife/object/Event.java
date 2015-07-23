@@ -16,12 +16,6 @@ public class Event extends ParseObject {
 	public static final String ORDER_INDEX = "orderIndex";
 
 	private static final String NEWLINE = System.getProperty("line.separator");
-	public long id;
-	public String name;
-	public int score;
-	public long startDate;
-	public long endDate;
-	public int orderIndex;
 
 	public Event() { }
 

@@ -1,5 +1,6 @@
 package com.xizz.scoreoflife.util;
 
+import com.parse.ParseQuery;
 import com.xizz.scoreoflife.object.Event;
 import com.xizz.scoreoflife.object.EventCheck;
 
@@ -27,25 +28,14 @@ public class Util {
 		List<EventCheck> removeList = new LinkedList<>();
 		for (Event e : events) {
 			for (EventCheck c : checks) {
-				if (c.eventId == e.id
-						&& (c.date < e.startDate || c.date > e.endDate)) {
+				if (c.getEvent().getObjectId().equals(e.getObjectId())
+						&& (c.getDate() < e.getStartDate() || c.getDate() > e.getEndDate())) {
 					removeList.add(c);
 				}
 			}
 		}
 		for (EventCheck c : removeList) {
 			checks.remove(c);
-		}
-	}
-
-	public static void linkEventChecks(List<Event> events,
-	                                   List<EventCheck> checks) {
-		for (Event e : events) {
-			for (EventCheck c : checks) {
-				if (c.eventId == e.id) {
-					c.event = e;
-				}
-			}
 		}
 	}
 
@@ -57,4 +47,21 @@ public class Util {
 		}
 	}
 
+	public static List<EventCheck> getEventChecks(long startDate, long endDate)
+			throws com.parse.ParseException {
+		// TODO: Order these checks by orderindex
+		ParseQuery<EventCheck> query = ParseQuery.getQuery(EventCheck.CLASS_NAME);
+		query.fromLocalDatastore();
+		query.whereGreaterThanOrEqualTo(EventCheck.DATE, startDate);
+		query.whereLessThanOrEqualTo(EventCheck.DATE, endDate);
+		return query.find();
+	}
+
+	public static List<Event> getAllEvents() throws com.parse.ParseException {
+		ParseQuery<Event> query = ParseQuery.getQuery(Event.CLASS_NAME);
+		query.fromLocalDatastore();
+		query.orderByAscending(Event.ORDER_INDEX);
+		return query.find();
+
+	}
 }

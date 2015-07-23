@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.xizz.scoreoflife.db.DataSource;
+import com.parse.ParseException;
 import com.xizz.scoreoflife.object.Event;
 import com.xizz.scoreoflife.object.EventCheck;
 import com.xizz.scoreoflife.util.Util;
@@ -16,15 +16,30 @@ public class ScoreActivity extends Activity {
 
 	private final static long TODAY = Util.getToday();
 
+	private static int getTotalScore(List<Event> events, int days) {
+		int total = 0;
+		for (int i = 1; i <= days; ++i) {
+			for (Event e : events) {
+				long day = TODAY - Util.ONEDAY * i;
+				if (e.getStartDate() <= day && e.getEndDate() >= day) {
+					total += e.getScore();
+				}
+			}
+		}
+		return total;
+	}
+
 	private static int getScore(List<EventCheck> checks, int days) {
 		int score = 0;
 		for (EventCheck c : checks) {
 			// The event start date might be modified, so we should make sure
 			// the check date is after the event start date
-			if (c.isDone && c.date >= c.event.startDate
-					&& c.date <= c.event.endDate
-					&& c.date >= (TODAY - Util.ONEDAY * days) && c.date < TODAY) {
-				score += c.event.score;
+			if (c.getDone()
+					&& c.getDate() >= c.getEvent().getStartDate()
+					&& c.getDate() <= c.getEvent().getEndDate()
+					&& c.getDate() >= (TODAY - Util.ONEDAY * days)
+					&& c.getDate() < TODAY) {
+				score += c.getEvent().getScore();
 			}
 		}
 		return score;
@@ -35,30 +50,22 @@ public class ScoreActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_score);
 
-		final DataSource data = DataSource.getDataSource(this);
 
-		final List<EventCheck> checks = data.getChecks(
-				TODAY - Util.ONEDAY * 30, System.currentTimeMillis());
-		final List<Event> events = data.getAllEvents();
-		Util.linkEventChecks(events, checks);
+		List<EventCheck> checks = null;
+		List<Event> events = null;
+		try {
+			checks = Util.getEventChecks(TODAY - Util.ONEDAY * 30, System
+					.currentTimeMillis());
+			events = Util.getAllEvents();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 
 		// calculate the scores of week and month
 		final int weekTotal = getTotalScore(events, 7);
 		final int monthTotal = getTotalScore(events, 30);
 		final int weekScore = getScore(checks, 7);
 		final int monthScore = getScore(checks, 30);
-
-		// StringBuilder str = new StringBuilder();
-		// str.append("Past 7 days: " + weekScore + "/" + weekTotal + NEWLINE);
-		// str.append("Completion: "
-		// + MessageFormat.format("{0,number,#.##%}", weekScore * 1.0
-		// / weekTotal) + NEWLINE + NEWLINE);
-		//
-		// str.append("Past 30 days: " + monthScore + "/" + monthTotal +
-		// NEWLINE);
-		// str.append("Completion: "
-		// + MessageFormat.format("{0,number,#.##%}", monthScore * 1.0
-		// / monthTotal));
 
 		TextView line1 = (TextView) findViewById(R.id.scoreText1);
 		TextView line2 = (TextView) findViewById(R.id.scoreText2);
@@ -73,18 +80,5 @@ public class ScoreActivity extends Activity {
 		line4.setText("Completion: "
 				+ MessageFormat.format("{0,number,#.##%}", monthScore * 1.0
 				/ monthTotal));
-	}
-
-	private int getTotalScore(List<Event> events, int days) {
-		int total = 0;
-		for (int i = 1; i <= days; ++i) {
-			for (Event e : events) {
-				long day = TODAY - Util.ONEDAY * i;
-				if (e.startDate <= day && e.endDate >= day) {
-					total += e.score;
-				}
-			}
-		}
-		return total;
 	}
 }
