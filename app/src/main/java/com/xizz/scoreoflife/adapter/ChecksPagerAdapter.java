@@ -14,6 +14,7 @@ import com.parse.ParseQuery;
 import com.xizz.scoreoflife.R;
 import com.xizz.scoreoflife.object.Event;
 import com.xizz.scoreoflife.object.EventCheck;
+import com.xizz.scoreoflife.util.Data;
 import com.xizz.scoreoflife.util.Util;
 
 import java.util.List;
@@ -94,7 +95,7 @@ public class ChecksPagerAdapter extends PagerAdapter {
 		}
 		List<EventCheck> checks = null;
 		try {
-			checks = Util.getEventChecks(date, date + DAY_MILLI_SECS - 1);
+			checks = Data.getEventChecks(date, date + DAY_MILLI_SECS - 1);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -122,7 +123,7 @@ public class ChecksPagerAdapter extends PagerAdapter {
 	}
 
 	private void createChecksIfNotExist(long date) throws ParseException {
-		List<EventCheck> checks = Util.getEventChecks(date, date + DAY_MILLI_SECS - 1);
+		List<EventCheck> checks = Data.getEventChecks(date, date + DAY_MILLI_SECS - 1);
 		for (Event e : mEvents) {
 			if (date >= e.getStartDate() && date <= e.getEndDate() && !eventExist(e, checks)) {
 				EventCheck check = new EventCheck(e, date);
@@ -131,5 +132,4 @@ public class ChecksPagerAdapter extends PagerAdapter {
 			}
 		}
 	}
-
 }

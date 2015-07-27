@@ -7,6 +7,7 @@ import android.widget.TextView;
 import com.parse.ParseException;
 import com.xizz.scoreoflife.object.Event;
 import com.xizz.scoreoflife.object.EventCheck;
+import com.xizz.scoreoflife.util.Data;
 import com.xizz.scoreoflife.util.Util;
 
 import java.text.MessageFormat;
@@ -21,9 +22,8 @@ public class ScoreActivity extends Activity {
 		for (int i = 1; i <= days; ++i) {
 			for (Event e : events) {
 				long day = TODAY - Util.ONEDAY * i;
-				if (e.getStartDate() <= day && e.getEndDate() >= day) {
+				if (e.getStartDate() <= day && e.getEndDate() >= day)
 					total += e.getScore();
-				}
 			}
 		}
 		return total;
@@ -50,13 +50,11 @@ public class ScoreActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_score);
 
-
 		List<EventCheck> checks = null;
 		List<Event> events = null;
 		try {
-			checks = Util.getEventChecks(TODAY - Util.ONEDAY * 30, System
-					.currentTimeMillis());
-			events = Util.getAllEvents();
+			checks = Data.getEventChecks(TODAY - Util.ONEDAY * 30, System.currentTimeMillis());
+			events = Data.getAllEvents();
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -73,12 +71,10 @@ public class ScoreActivity extends Activity {
 		TextView line4 = (TextView) findViewById(R.id.scoreText4);
 
 		line1.setText("Past 7 days: " + weekScore + "/" + weekTotal);
-		line2.setText("Completion: "
-				+ MessageFormat.format("{0,number,#.##%}", weekScore * 1.0
-				/ weekTotal));
+		line2.setText("Completion: " + MessageFormat.format("{0,number,#.##%}",
+				weekScore * 1.0 / weekTotal));
 		line3.setText("Past 30 days: " + monthScore + "/" + monthTotal);
-		line4.setText("Completion: "
-				+ MessageFormat.format("{0,number,#.##%}", monthScore * 1.0
-				/ monthTotal));
+		line4.setText("Completion: " + MessageFormat.format("{0,number,#.##%}",
+				monthScore * 1.0 / monthTotal));
 	}
 }

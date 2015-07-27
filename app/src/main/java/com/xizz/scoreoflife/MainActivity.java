@@ -13,6 +13,7 @@ import com.parse.ParseUser;
 import com.parse.ui.ParseLoginActivity;
 import com.xizz.scoreoflife.adapter.ChecksPagerAdapter;
 import com.xizz.scoreoflife.object.Event;
+import com.xizz.scoreoflife.util.Data;
 import com.xizz.scoreoflife.util.Util;
 
 public class MainActivity extends Activity {
@@ -36,6 +37,8 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 
 		mPager = (ViewPager) findViewById(R.id.pager);
+
+		syncFromCloud();
 	}
 
 	@Override
@@ -45,23 +48,12 @@ public class MainActivity extends Activity {
 		if (ParseUser.getCurrentUser() == null)
 			startActivity(new Intent(this, ParseLoginActivity.class));
 
-		mAdapter = new ChecksPagerAdapter(this);
-		mPager.setAdapter(mAdapter);
-		// mPosition could be saved from previous state.
-		// Set it to the current day be default.
-		if (mDisplayDate == -1) {
-			mDisplayDate = Util.getToday();
-		}
-		if (mDisplayDate < mAdapter.getFirstDay()) {
-			mDisplayDate = mAdapter.getFirstDay();
-		}
-		mPager.setCurrentItem(dateToIndex(mDisplayDate, mAdapter.getFirstDay()));
+		loadEventCheckList();
 	}
 
 	@Override
 	protected void onPause() {
-		mDisplayDate = indexToDate(mPager.getCurrentItem(),
-				mAdapter.getFirstDay());
+		mDisplayDate = indexToDate(mPager.getCurrentItem(), mAdapter.getFirstDay());
 		super.onPause();
 	}
 
@@ -84,6 +76,9 @@ public class MainActivity extends Activity {
 			case R.id.manage_events:
 				startActivity(new Intent(this, EventsActivity.class));
 				break;
+			case R.id.sync:
+				syncFromCloud();
+				break;
 			case R.id.sign_out:
 				ParseUser.logOut();
 				startActivity(new Intent(this, ParseLoginActivity.class));
@@ -98,9 +93,8 @@ public class MainActivity extends Activity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
-		if (resultCode != RESULT_OK || data == null) {
+		if (resultCode != RESULT_OK || data == null)
 			return;
-		}
 
 		switch (requestCode) {
 			case Util.REQUEST_ADD:
@@ -116,9 +110,47 @@ public class MainActivity extends Activity {
 				} catch (ParseException e) {
 					Log.e(TAG, "Error pinning event: " + e.getMessage());
 				}
-				EventsActivity.updateOrderIndex();
+				Data.updateOrderIndex();
 				break;
 		}
 	}
 
+	private void syncFromCloud() {
+		// pull latest events and checks from cloud
+		Thread thread = new Thread(new Sync());
+		thread.start();
+		Log.d(TAG, "started thread: " + thread.getName());
+	}
+
+	private void loadEventCheckList() {
+		mAdapter = new ChecksPagerAdapter(this);
+		mPager.setAdapter(mAdapter);
+		// mPosition could be saved from previous state.
+		// Set it to the current day be default.
+		if (mDisplayDate == -1) {
+			mDisplayDate = Util.getToday();
+		}
+		if (mDisplayDate < mAdapter.getFirstDay()) {
+			mDisplayDate = mAdapter.getFirstDay();
+		}
+		mPager.setCurrentItem(dateToIndex(mDisplayDate, mAdapter.getFirstDay()));
+	}
+
+	private class Sync implements Runnable {
+		private final String TAG = Sync.class.getSimpleName();
+
+		@Override
+		public void run() {
+			Data.syncEvents();
+			Data.syncChecks();
+			runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					// TODO: need to check if activity is still available
+					loadEventCheckList();
+					Log.d(TAG, "loaded event list after synchronization");
+				}
+			});
+		}
+	}
 }

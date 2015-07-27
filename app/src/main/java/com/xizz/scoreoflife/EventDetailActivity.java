@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.xizz.scoreoflife.object.Event;
+import com.xizz.scoreoflife.util.Data;
 import com.xizz.scoreoflife.util.Util;
 
 import java.sql.Date;
@@ -114,7 +115,7 @@ public class EventDetailActivity extends Activity {
 		alertBuilder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				mEvent.deleteEventually();
+				Data.deleteEvent(mEvent);
 				finish();
 			}
 		});

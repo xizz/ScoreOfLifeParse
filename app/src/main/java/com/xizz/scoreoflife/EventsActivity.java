@@ -15,12 +15,12 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.ui.ParseLoginActivity;
 import com.xizz.scoreoflife.adapter.EventsAdapter;
 import com.xizz.scoreoflife.object.Event;
+import com.xizz.scoreoflife.util.Data;
 import com.xizz.scoreoflife.util.Util;
 
 import java.util.List;
@@ -40,22 +40,6 @@ public class EventsActivity extends Activity implements
 	private Event mEventClicked;
 	private int mCurrentList = CURRENT_EVENTS;
 	private long mToday = Util.getToday();
-
-	public static void updateOrderIndex() {
-		ParseQuery<Event> query = ParseQuery.getQuery(Event.class.getSimpleName());
-		query.orderByAscending(Event.ORDER_INDEX);
-		query.fromLocalDatastore();
-		try {
-			List<Event> events = query.find();
-			for (int i = 0; i < events.size(); ++i) {
-				Event event = events.get(i);
-				event.setOrderIndex(i + 1);
-				event.saveEventually();
-			}
-		} catch (ParseException e) {
-			Log.e(TAG, "Error reading local database: " + e.getMessage());
-		}
-	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -213,7 +197,7 @@ public class EventsActivity extends Activity implements
 				} catch (ParseException e) {
 					Log.e(TAG, "Error pinning event: " + e.getMessage());
 				}
-				updateOrderIndex();
+				Data.updateOrderIndex();
 				loadEventList();
 				break;
 			case Util.REQUEST_EDIT:
@@ -255,7 +239,7 @@ public class EventsActivity extends Activity implements
 					public void onClick(DialogInterface dialog, int which) {
 						mAdapter.remove(event);
 						mAdapter.notifyDataSetChanged();
-						event.deleteEventually();
+						Data.deleteEvent(event);
 					}
 				});
 		alertBuilder.setNegativeButton("Cancel",
@@ -365,22 +349,11 @@ public class EventsActivity extends Activity implements
 
 		@Override
 		public void run() {
-			ParseQuery<Event> query = ParseQuery.getQuery(Event.class.getSimpleName());
-			query.orderByAscending(Event.ORDER_INDEX);
-			List<Event> events;
-			try {
-				events = query.find();
-				Log.d(TAG, "Retrieved " + events.size() + " events");
-				ParseObject.unpinAll(Event.CLASS_NAME);
-				Log.d(TAG, "All old events unppinned from local database");
-				ParseObject.pinAll(Event.CLASS_NAME, events);
-				Log.d(TAG, "All new events pinned to local database");
-			} catch (ParseException e) {
-				Log.e(TAG, "Error synchronizing events: " + e.getMessage());
-			}
+			Data.syncEvents();
 			runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
+					// TODO: need to check if activity is still available
 					loadEventList();
 					Log.d(TAG, "loaded event list after synchronization");
 				}
