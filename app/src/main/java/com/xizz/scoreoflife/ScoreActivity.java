@@ -53,8 +53,9 @@ public class ScoreActivity extends Activity {
 		List<EventCheck> checks = null;
 		List<Event> events = null;
 		try {
-			checks = Data.getEventChecks(TODAY - Util.ONEDAY * 30, System.currentTimeMillis());
-			events = Data.getAllEvents();
+			checks = Data.getLocalEventChecks(TODAY - Util.ONEDAY * 30, System.currentTimeMillis
+					());
+			events = Data.getAllLocalEvents();
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}

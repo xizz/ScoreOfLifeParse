@@ -6,7 +6,7 @@ import com.parse.ParseObject;
 import java.sql.Date;
 
 @ParseClassName("Event")
-public class Event extends ParseObject {
+public class Event extends ParseObject implements Comparable<Event> {
 	public static final String CLASS_NAME = Event.class.getSimpleName();
 	public static final String ID = "id";
 	public static final String NAME = "name";
@@ -53,4 +53,8 @@ public class Event extends ParseObject {
 
 	public void setOrderIndex(int score) { put(ORDER_INDEX, score); }
 
+	@Override
+	public int compareTo(Event another) {
+		return this.getOrderIndex() - another.getOrderIndex();
+	}
 }

@@ -17,6 +17,8 @@ import com.xizz.scoreoflife.object.EventCheck;
 import com.xizz.scoreoflife.util.Data;
 import com.xizz.scoreoflife.util.Util;
 
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 public class ChecksPagerAdapter extends PagerAdapter {
@@ -37,7 +39,6 @@ public class ChecksPagerAdapter extends PagerAdapter {
 		ParseQuery<Event> query = ParseQuery.getQuery(Event.CLASS_NAME);
 		query.fromLocalDatastore();
 
-		// TODO: there might be a limit for query all
 		try {
 			mEvents = query.find();
 		} catch (ParseException e) {
@@ -61,7 +62,7 @@ public class ChecksPagerAdapter extends PagerAdapter {
 
 	private static boolean eventExist(Event event, List<EventCheck> checks) {
 		for (EventCheck c : checks) {
-			if (event.getObjectId().equals(c.getEvent().getObjectId()))
+			if (event.equals(c.getEvent()))
 				return true;
 		}
 		return false;
@@ -88,19 +89,17 @@ public class ChecksPagerAdapter extends PagerAdapter {
 
 		long date = mFirstDay + DAY_MILLI_SECS * position;
 
+		List<EventCheck> checks = null;
+
 		try {
 			createChecksIfNotExist(date);
+			checks = Data.getLocalEventChecks(date, date + DAY_MILLI_SECS - 1);
+			Collections.sort(checks);
+			Data.removeLegacyChecks(checks);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		List<EventCheck> checks = null;
-		try {
-			checks = Data.getEventChecks(date, date + DAY_MILLI_SECS - 1);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		//TODO: Evaluate the following. Are they still needed?
-		Util.removeLegacyChecks(mEvents, checks);
+
 		checksList.setAdapter(new ChecksAdapter(mContext, checks));
 
 		container.addView(view);
@@ -123,7 +122,8 @@ public class ChecksPagerAdapter extends PagerAdapter {
 	}
 
 	private void createChecksIfNotExist(long date) throws ParseException {
-		List<EventCheck> checks = Data.getEventChecks(date, date + DAY_MILLI_SECS - 1);
+		List<EventCheck> checks = Data.getLocalEventChecks(date, date + DAY_MILLI_SECS - 1);
+		Log.d(TAG, new Date(date).toString());
 		for (Event e : mEvents) {
 			if (date >= e.getStartDate() && date <= e.getEndDate() && !eventExist(e, checks)) {
 				EventCheck check = new EventCheck(e, date);

@@ -63,7 +63,8 @@ public class EventsActivity extends Activity implements
 	}
 
 	private void loadEventList() {
-
+		if (mEventsView == null)
+			return;
 		ParseQuery<Event> query = ParseQuery.getQuery(Event.class.getSimpleName());
 		query.fromLocalDatastore();
 		query.orderByAscending(Event.ORDER_INDEX);
@@ -349,11 +350,15 @@ public class EventsActivity extends Activity implements
 
 		@Override
 		public void run() {
-			Data.syncEvents();
+			try {
+				Data.syncEvents();
+			} catch (ParseException e) {
+				Log.e(TAG, "Error synchronizing data: " + e.getMessage());
+				e.printStackTrace();
+			}
 			runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
-					// TODO: need to check if activity is still available
 					loadEventList();
 					Log.d(TAG, "loaded event list after synchronization");
 				}

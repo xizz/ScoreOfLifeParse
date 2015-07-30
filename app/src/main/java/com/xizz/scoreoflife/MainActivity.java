@@ -123,6 +123,8 @@ public class MainActivity extends Activity {
 	}
 
 	private void loadEventCheckList() {
+		if (mPager == null)
+			return;
 		mAdapter = new ChecksPagerAdapter(this);
 		mPager.setAdapter(mAdapter);
 		// mPosition could be saved from previous state.
@@ -141,12 +143,17 @@ public class MainActivity extends Activity {
 
 		@Override
 		public void run() {
-			Data.syncEvents();
-			Data.syncChecks();
+			try {
+				Data.syncEvents();
+				Data.syncChecks();
+			} catch (ParseException e) {
+				Log.e(TAG, "Error synchronizing events: " + e.getMessage());
+				e.printStackTrace();
+			}
+
 			runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
-					// TODO: need to check if activity is still available
 					loadEventCheckList();
 					Log.d(TAG, "loaded event list after synchronization");
 				}

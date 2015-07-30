@@ -6,7 +6,7 @@ import com.parse.ParseObject;
 import java.sql.Date;
 
 @ParseClassName("EventCheck")
-public class EventCheck extends ParseObject {
+public class EventCheck extends ParseObject implements Comparable<EventCheck> {
 	public static final String CLASS_NAME = EventCheck.class.getSimpleName();
 	public static final String EVENT = "event";
 	public static final String DATE = "date";
@@ -38,4 +38,16 @@ public class EventCheck extends ParseObject {
 	public boolean getDone() { return getBoolean(DONE); }
 
 	public void setDone(boolean done) { put(DONE, done);}
+
+	@Override
+	public int compareTo(EventCheck another) {
+		if (this.getEvent() == null && another.getEvent() == null)
+			return 0;
+		else if (this.getEvent() == null)
+			return -1;
+		else if (another.getEvent() == null)
+			return 1;
+		else
+			return this.getEvent().compareTo(another.getEvent());
+	}
 }
