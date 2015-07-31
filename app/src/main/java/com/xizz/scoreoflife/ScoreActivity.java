@@ -21,7 +21,7 @@ public class ScoreActivity extends Activity {
 		int total = 0;
 		for (int i = 1; i <= days; ++i) {
 			for (Event e : events) {
-				long day = TODAY - Util.ONEDAY * i;
+				long day = TODAY - Util.DAY_MILLI_SECS * i;
 				if (e.getStartDate() <= day && e.getEndDate() >= day)
 					total += e.getScore();
 			}
@@ -37,7 +37,7 @@ public class ScoreActivity extends Activity {
 			if (c.getDone()
 					&& c.getDate() >= c.getEvent().getStartDate()
 					&& c.getDate() <= c.getEvent().getEndDate()
-					&& c.getDate() >= (TODAY - Util.ONEDAY * days)
+					&& c.getDate() >= (TODAY - Util.DAY_MILLI_SECS * days)
 					&& c.getDate() < TODAY) {
 				score += c.getEvent().getScore();
 			}
@@ -53,7 +53,8 @@ public class ScoreActivity extends Activity {
 		List<EventCheck> checks = null;
 		List<Event> events = null;
 		try {
-			checks = Data.getLocalEventChecks(TODAY - Util.ONEDAY * 30, System.currentTimeMillis
+			checks = Data.getLocalEventChecks(TODAY - Util.DAY_MILLI_SECS * 30, System
+					.currentTimeMillis
 					());
 			events = Data.getAllLocalEvents();
 		} catch (ParseException e) {

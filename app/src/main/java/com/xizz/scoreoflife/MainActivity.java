@@ -23,12 +23,13 @@ public class MainActivity extends Activity {
 	private ViewPager mPager;
 	private ChecksPagerAdapter mAdapter;
 
+
 	private static int dateToIndex(long date, long startDate) {
-		return (int) ((date - startDate) / Util.ONEDAY);
+		return (int) ((date - startDate) / Util.DAY_MILLI_SECS);
 	}
 
 	private static long indexToDate(int index, long startDate) {
-		return startDate + index * Util.ONEDAY;
+		return startDate + index * Util.DAY_MILLI_SECS;
 	}
 
 	@Override
@@ -46,7 +47,7 @@ public class MainActivity extends Activity {
 		super.onResume();
 
 		if (ParseUser.getCurrentUser() == null)
-			startActivity(new Intent(this, ParseLoginActivity.class));
+			startActivityForResult(new Intent(this, ParseLoginActivity.class), Util.REQUEST_LOGIN);
 
 		loadEventCheckList();
 	}
@@ -93,7 +94,7 @@ public class MainActivity extends Activity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
-		if (resultCode != RESULT_OK || data == null)
+		if (resultCode != RESULT_OK)
 			return;
 
 		switch (requestCode) {
@@ -112,8 +113,13 @@ public class MainActivity extends Activity {
 				}
 				Data.updateOrderIndex();
 				break;
+			case Util.REQUEST_LOGIN:
+				Log.d(TAG, "Logged in, sync now");
+				syncFromCloud();
+				break;
 		}
 	}
+
 
 	private void syncFromCloud() {
 		// pull latest events and checks from cloud

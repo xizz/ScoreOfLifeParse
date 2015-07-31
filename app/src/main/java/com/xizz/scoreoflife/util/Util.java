@@ -9,12 +9,14 @@ public class Util {
 
 	public final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
 			"yyyy-MM-dd", Locale.ENGLISH);
-	public final static long ONEDAY = 86400000;
+	public final static long DAY_MILLI_SECS = 86400000;
 
 	public final static String NEWLINE = System.getProperty("line.separator");
 
 	public final static int REQUEST_ADD = 111;
 	public final static int REQUEST_EDIT = 222;
+	public final static int REQUEST_LOGIN = 333;
+
 
 	public static long getToday() {
 		try {
