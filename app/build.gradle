@@ -20,8 +20,11 @@ android {
 
 dependencies {
 	compile fileTree(dir: 'libs', include: ['*.jar'])
-	compile 'com.android.support:support-v13:22.1.1'
+	compile 'com.android.support:support-v13:22.2.0'
 	compile 'com.parse.bolts:bolts-android:1.2.0'
 	compile files('libs/Parse-1.9.3.jar')
 	compile project(':ParseLoginUI')
+
+	testCompile 'junit:junit:4.12'
+	testCompile 'org.robolectric:robolectric:3.0'
 }
