@@ -9,7 +9,6 @@ import com.xizz.scoreoflife.object.Event;
 import com.xizz.scoreoflife.object.EventCheck;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -51,7 +50,6 @@ public class Data {
 			}
 		} catch (ParseException e) {
 			Log.e(TAG, "Error: " + e.getMessage());
-			e.printStackTrace();
 		}
 		event.deleteEventually();
 	}
@@ -104,7 +102,6 @@ public class Data {
 	public static void createChecksIfNotExist(long date) throws ParseException {
 		List<Event> events = getAllLocalEvents();
 		List<EventCheck> checks = Data.getLocalEventChecks(date, date + Util.DAY_MILLI_SECS - 1);
-		Log.d(TAG, new Date(date).toString());
 		for (Event e : events) {
 			if (date >= e.getStartDate() && date <= e.getEndDate() && !eventCheckExist(e,
 					checks)) {

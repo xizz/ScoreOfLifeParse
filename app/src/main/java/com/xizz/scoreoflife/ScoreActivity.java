@@ -2,6 +2,7 @@ package com.xizz.scoreoflife;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.parse.ParseException;
@@ -14,8 +15,8 @@ import java.text.MessageFormat;
 import java.util.List;
 
 public class ScoreActivity extends Activity {
-
-	private final static long TODAY = Util.getToday();
+	private static final String TAG = ScoreActivity.class.getSimpleName();
+	private static final long TODAY = Util.getToday();
 
 	private static int getTotalScore(List<Event> events, int days) {
 		int total = 0;
@@ -53,12 +54,11 @@ public class ScoreActivity extends Activity {
 		List<EventCheck> checks = null;
 		List<Event> events = null;
 		try {
-			checks = Data.getLocalEventChecks(TODAY - Util.DAY_MILLI_SECS * 30, System
-					.currentTimeMillis
-					());
+			checks = Data.getLocalEventChecks(TODAY - Util.DAY_MILLI_SECS * 30,
+					System.currentTimeMillis());
 			events = Data.getAllLocalEvents();
 		} catch (ParseException e) {
-			e.printStackTrace();
+			Log.e(TAG, "Error: " + e.getMessage());
 		}
 
 		// calculate the scores of week and month

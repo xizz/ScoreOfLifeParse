@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +23,7 @@ import java.sql.Date;
 import java.text.ParseException;
 
 public class EventInputActivity extends Activity {
+	private static final String TAG = EventInputActivity.class.getSimpleName();
 
 	private DatePickerDialog mStartDatePicker;
 	private DatePickerDialog mEndDatePicker;
@@ -121,14 +123,11 @@ public class EventInputActivity extends Activity {
 		output.putExtra(Event.NAME, mNameView.getText().toString());
 		output.putExtra(Event.SCORE, Integer.parseInt(score));
 		try {
-			output.putExtra(Event.START_DATE, Util.DATE_FORMAT.parse(startDate)
-					.getTime());
-			if (mCheckEndDate.isChecked()) {
-				output.putExtra(Event.END_DATE, Util.DATE_FORMAT.parse(endDate)
-						.getTime());
-			}
+			output.putExtra(Event.START_DATE, Util.DATE_FORMAT.parse(startDate).getTime());
+			if (mCheckEndDate.isChecked())
+				output.putExtra(Event.END_DATE, Util.DATE_FORMAT.parse(endDate).getTime());
 		} catch (ParseException e) {
-			e.printStackTrace();
+			Log.e(TAG, "Error: " + e.getMessage());
 		}
 		setResult(RESULT_OK, output);
 		finish();

@@ -154,7 +154,6 @@ public class MainActivity extends Activity {
 				Data.syncChecks();
 			} catch (ParseException e) {
 				Log.e(TAG, "Error synchronizing events: " + e.getMessage());
-				e.printStackTrace();
 			}
 
 			runOnUiThread(new Runnable() {

@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -18,6 +19,7 @@ import com.xizz.scoreoflife.util.Util;
 import java.sql.Date;
 
 public class EventDetailActivity extends Activity {
+	private static final String TAG = EventDetailActivity.class.getSimpleName();
 
 	private TextView mNameView;
 	private TextView mScoreView;
@@ -51,7 +53,7 @@ public class EventDetailActivity extends Activity {
 				mEvent = query.getFirst();
 			}
 		} catch (ParseException e) {
-			e.printStackTrace();
+			Log.e(TAG, "Error loading event: " + e.getMessage());
 		}
 
 		updateDisplay();

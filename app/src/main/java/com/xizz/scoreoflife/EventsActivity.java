@@ -354,7 +354,6 @@ public class EventsActivity extends Activity implements
 				Data.syncEvents();
 			} catch (ParseException e) {
 				Log.e(TAG, "Error synchronizing data: " + e.getMessage());
-				e.printStackTrace();
 			}
 			runOnUiThread(new Runnable() {
 				@Override

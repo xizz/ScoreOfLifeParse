@@ -35,7 +35,6 @@ public class ChecksPagerAdapter extends PagerAdapter {
 			mFirstDay = Data.getEarliestDate();
 		} catch (ParseException e) {
 			Log.d(TAG, "Error finding first day: " + e.getMessage());
-			e.printStackTrace();
 			mFirstDay = TODAY;
 		}
 	}
@@ -69,7 +68,7 @@ public class ChecksPagerAdapter extends PagerAdapter {
 			Collections.sort(checks);
 			Data.removeLegacyChecks(checks);
 		} catch (ParseException e) {
-			e.printStackTrace();
+			Log.e(TAG, "Error: " + e.getMessage());
 		}
 
 		checksList.setAdapter(new ChecksAdapter(mContext, checks));
