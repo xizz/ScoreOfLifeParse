@@ -150,8 +150,8 @@ public class MainActivity extends Activity {
 		@Override
 		public void run() {
 			try {
-				Data.syncEvents();
 				Data.syncChecks();
+				Data.syncEvents();
 			} catch (ParseException e) {
 				Log.e(TAG, "Error synchronizing events: " + e.getMessage());
 			}

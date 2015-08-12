@@ -67,8 +67,6 @@ public class Data {
 	public static void syncChecks() throws ParseException {
 		List<EventCheck> checks = getAllCloudChecks();
 
-		removeLegacyChecks(checks);
-
 		ParseObject.unpinAll(EventCheck.CLASS_NAME);
 		ParseObject.pinAll(checks);
 	}
