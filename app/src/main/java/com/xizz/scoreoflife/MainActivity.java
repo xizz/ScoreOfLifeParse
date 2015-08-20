@@ -120,7 +120,6 @@ public class MainActivity extends Activity {
 		}
 	}
 
-
 	private void syncFromCloud() {
 		// pull latest events and checks from cloud
 		Thread thread = new Thread(new Sync());
@@ -150,8 +149,9 @@ public class MainActivity extends Activity {
 		@Override
 		public void run() {
 			try {
-				Data.syncChecks();
 				Data.syncEvents();
+				Data.syncChecks();
+
 			} catch (ParseException e) {
 				Log.e(TAG, "Error synchronizing events: " + e.getMessage());
 			}

@@ -97,6 +97,21 @@ public class Data {
 		}
 	}
 
+	public static void removeDuplicateChecks(List<EventCheck> checks) throws ParseException {
+		List<EventCheck> removeList = new LinkedList<>();
+		for (int i = 0; i < checks.size() - 1; ++i) {
+			for (int j = i + 1; j < checks.size(); ++j) {
+				if (checks.get(i).getEvent() == checks.get(j).getEvent()
+						&& checks.get(i).getDate() == checks.get(j).getDate())
+					removeList.add(checks.get(i));
+			}
+		}
+		for (EventCheck c : removeList) {
+			checks.remove(c);
+			c.deleteEventually();
+		}
+	}
+
 	public static void createChecksIfNotExist(long date) throws ParseException {
 		List<Event> events = getAllLocalEvents();
 		List<EventCheck> checks = Data.getLocalEventChecks(date, date + Util.DAY_MILLI_SECS - 1);
