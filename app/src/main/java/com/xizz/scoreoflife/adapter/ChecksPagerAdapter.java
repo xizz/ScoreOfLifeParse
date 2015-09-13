@@ -66,7 +66,6 @@ public class ChecksPagerAdapter extends PagerAdapter {
 			Data.createChecksIfNotExist(date);
 			checks = Data.getLocalEventChecks(date, date + Util.DAY_MILLI_SECS - 1);
 			Collections.sort(checks);
-			Data.removeDuplicateChecks(checks);
 			Data.removeLegacyChecks(checks);
 		} catch (ParseException e) {
 			Log.e(TAG, "Error: " + e.getMessage());

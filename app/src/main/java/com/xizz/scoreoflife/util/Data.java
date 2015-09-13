@@ -66,6 +66,7 @@ public class Data {
 
 	public static void syncChecks() throws ParseException {
 		List<EventCheck> checks = getAllCloudChecks();
+		removeDuplicateChecks(checks);
 
 		ParseObject.unpinAll(EventCheck.CLASS_NAME);
 		ParseObject.pinAll(checks);
@@ -102,8 +103,9 @@ public class Data {
 		for (int i = 0; i < checks.size() - 1; ++i) {
 			for (int j = i + 1; j < checks.size(); ++j) {
 				if (checks.get(i).getEvent() == checks.get(j).getEvent()
-						&& checks.get(i).getDate() == checks.get(j).getDate())
-					removeList.add(checks.get(i));
+						&& checks.get(i).getDate() == checks.get(j).getDate()) {
+					removeList.add(checks.get(i).getDone() ? checks.get(j) : checks.get(i));
+				}
 			}
 		}
 		for (EventCheck c : removeList) {
